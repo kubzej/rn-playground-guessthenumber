@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import colors from '../components/constants/colors';
 
 const Header = (props) => {
   return (
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
     width: '100%', // width is through whole screen, as for main App View element the flex=1
     height: 90,
     paddingTop: 36, // because of status bar
-    backgroundColor: '#7FE58A',
+    backgroundColor: colors.primary,
     justifyContent: 'center', // how the child elements are positioned => Primary axis (flex direction column is default)
     alignItems: 'center', // how the child elements are positioned => Secondary axis
   },
