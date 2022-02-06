@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import colors from '../constants/colors';
 
 const StartGameScreen = (props) => {
+  const [enteredValue, setEnteredValue] = useState('');
+
+  const numberInputHandler = (inputText) => {
+    setEnteredValue(inputText.replace(/[^0-9]/g, '')); // replace non number string with empty string and set it as enteredValue
+  };
+
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Start a new game</Text>
@@ -15,6 +21,8 @@ const StartGameScreen = (props) => {
           blurOnSubmit // official props which I am forwarding to TextInput component in my own Input.js
           keyboardType='number-pad'
           maxLength={2}
+          onChangeText={numberInputHandler} // when changing text run validation
+          value={enteredValue} // set value as enteredValue which is taken from numberInputHandler
         />
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
