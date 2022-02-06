@@ -50,7 +50,7 @@ const StartGameScreen = (props) => {
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button title='START GAME' />
       </Card>
-    ); // if number is confirmed, add new element and input it to return() as {confirmedOutput}
+    ); // if number is confirmed, add new element containing NumberContainer and Button Start Game and put it to return() as {confirmedOutput}
   }
   return (
     <TouchableWithoutFeedback

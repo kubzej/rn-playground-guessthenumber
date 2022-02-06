@@ -7,6 +7,7 @@ const NumberContainer = (props) => {
     <View style={styles.container}>
       <Text style={styles.number}>{props.children}</Text>
     </View>
+    // props.children are taken from inside parental tags of <NumberContainer>, in this case from {selectedNumber}
   );
 };
 
