@@ -50,7 +50,7 @@ const StartGameScreen = (props) => {
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button
           title='START GAME'
-          onPress={() => props.onStartGame(selectedNumber)}
+          onPress={() => props.onStartGame(selectedNumber)} // after click save to props OnStartGame selected Number
         />
       </Card>
     ); // if number is confirmed, add new element containing NumberContainer and Button Start Game and put it to return() as {confirmedOutput}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
@@ -20,13 +20,45 @@ const GameScreen = (props) => {
     generateRandomBetween(1, 100, props.userChoice) // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
   );
 
+  // it survives render and keep its value
+  const currentLow = useRef(1);
+  const currentHigh = useRef(100);
+
+  const nextGuessHandler = (direction) => {
+    // validation that I am not giving bad advices lower/greater
+    if (
+      (direction === 'lower' && currentGuess < props.userChoice) ||
+      (direction === 'greater' && currentGuess > props.userChoice)
+    ) {
+      // if I gave bad advice, open Alert
+      Alert.alert('Do not lie!', 'You know that this is wrong...', [
+        { text: 'Sorry!', style: 'cancel' },
+      ]);
+      return;
+    }
+    if (direction === 'lower') {
+      currentHigh.current = currentGuess; // save new current high = current guess (next number cant be higher than this one)
+    } else {
+      currentLow.current = currentGuess; // save new current low = current guess (next number cant be lower than this one)
+    }
+    const nextNumber = generateRandomBetween(
+      currentLow.current,
+      currentHigh.current,
+      currentGuess
+    ); // guess again with new lows and highs
+    setCurrentGuess(nextNumber);
+  };
+
   return (
     <View style={styles.screen}>
       <Text>Opponnet's guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title='LOWER' onPress={() => {}} />
-        <Button title='GREATER' onPress={() => {}} />
+        <Button title='LOWER' onPress={nextGuessHandler.bind(this, 'lower')} />
+        <Button
+          title='GREATER'
+          onPress={nextGuessHandler.bind(this, 'greater')}
+        />
       </Card>
     </View>
   );
