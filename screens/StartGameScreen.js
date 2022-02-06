@@ -12,12 +12,34 @@ import Input from '../components/Input';
 import colors from '../constants/colors';
 
 const StartGameScreen = (props) => {
-  const [enteredValue, setEnteredValue] = useState('');
+  const [enteredValue, setEnteredValue] = useState(''); // value I am entering, is inside text input
+  const [confirmed, setConfirmed] = useState(false); // state to know if the enteredValue is confirmed
+  const [selectedNumber, setSelectedNumber] = useState(); // number after confirming enteredNumber, number I really want to work with
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, '')); // replace non number string with empty string and set it as enteredValue
   };
 
+  const resetInputHandler = () => {
+    setEnteredValue('');
+    setConfirmed(false);
+  };
+
+  const confirmInputHandler = () => {
+    const chosenNumber = parseInt(enteredValue);
+    if (Number.isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      // validation of chosenNumber, if number is not validate, dont run setConfirmed....
+      return;
+    }
+    setConfirmed(true);
+    setSelectedNumber(chosenNumber);
+    setEnteredValue('');
+  };
+
+  let confirmedOutput;
+  if (confirmed) {
+    confirmedOutput = <Text>Selected number: {selectedNumber}</Text>; // if number is confirmed, add new element and input it to return() as {confirmedOutput}
+  }
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -25,7 +47,7 @@ const StartGameScreen = (props) => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a new game</Text>
+        <Text style={styles.title}>Start a new game!</Text>
         <Card style={styles.inputContainer}>
           <Text>Select a number:</Text>
           <Input
@@ -38,13 +60,22 @@ const StartGameScreen = (props) => {
           />
           <View style={styles.buttonContainer}>
             <View style={styles.button}>
-              <Button title='Reset' color={colors.accent} />
+              <Button
+                title='Reset'
+                color={colors.accent}
+                onPress={resetInputHandler}
+              />
             </View>
             <View style={styles.button}>
-              <Button title='Confirm' color={colors.primary} />
+              <Button
+                title='Confirm'
+                color={colors.primary}
+                onPress={confirmInputHandler}
+              />
             </View>
           </View>
         </Card>
+        {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
   );
