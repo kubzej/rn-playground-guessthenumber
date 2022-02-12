@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingVertical: 20,
     paddingHorizontal: 30,
-    borderRadius: 30,
+    borderRadius: 25,
   },
   buttonText: {
     color: 'white',
