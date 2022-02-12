@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 10,
+    marginVertical: 10,
   },
 });
 

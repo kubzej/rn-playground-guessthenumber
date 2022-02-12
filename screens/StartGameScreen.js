@@ -33,7 +33,7 @@ const StartGameScreen = (props) => {
     const chosenNumber = parseInt(enteredValue);
     // validation of chosenNumber, if number is not validate, dont run setConfirmed....
     if (Number.isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
-      Alert.alert('Invalid number!', 'Number has to be between 1 and 99.', [
+      Alert.alert('Invalid number!', 'Number has to be between 1 and 99', [
         { text: 'Okay', style: 'destructive', onPress: resetInputHandler },
       ]); // show native alert, after pressing on Okay button, reset input
       return;
@@ -48,11 +48,12 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You selected</Text>
+        <BodyText>Your selected number:</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button
           title='START GAME'
           onPress={() => props.onStartGame(selectedNumber)} // after click save to props OnStartGame selected Number
+          color={colors.primary}
         />
       </Card>
     ); // if number is confirmed, add new element containing NumberContainer and Button Start Game and put it to return() as {confirmedOutput}
@@ -66,7 +67,7 @@ const StartGameScreen = (props) => {
       <View style={styles.screen}>
         <TitleText style={styles.title}>Start a new game!</TitleText>
         <Card style={styles.inputContainer}>
-          <BodyText>Select a number:</BodyText>
+          <BodyText>Write a number:</BodyText>
           <Input
             style={styles.input}
             blurOnSubmit // official props which I am forwarding to TextInput component in my own Input.js
@@ -78,14 +79,14 @@ const StartGameScreen = (props) => {
           <View style={styles.buttonContainer}>
             <View style={styles.button}>
               <Button
-                title='Reset'
+                title='RESET'
                 color={colors.accent}
                 onPress={resetInputHandler}
               />
             </View>
             <View style={styles.button}>
               <Button
-                title='Confirm'
+                title='CONFIRM'
                 color={colors.primary}
                 onPress={confirmInputHandler}
               />
