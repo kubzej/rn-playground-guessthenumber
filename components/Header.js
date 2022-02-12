@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../constants/colors';
+import TitleText from './TitleText';
 
 const Header = (props) => {
   return (
     <View style={styles.header}>
-      <Text style={styles.headerTitle}>{props.title}</Text>
+      <TitleText>{props.title}</TitleText>
     </View>
   );
 };
@@ -18,10 +19,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: 'center', // how the child elements are positioned => Primary axis (flex direction column is default)
     alignItems: 'center', // how the child elements are positioned => Secondary axis
-  },
-  headerTitle: {
-    color: 'black',
-    fontSize: 18,
   },
 });
 

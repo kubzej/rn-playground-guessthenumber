@@ -12,6 +12,8 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
 import colors from '../constants/colors';
+import BodyText from '../components/BodyText';
+import TitleText from '../components/TitleText';
 
 const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState(''); // value I am entering, is inside text input
@@ -62,9 +64,9 @@ const StartGameScreen = (props) => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a new game!</Text>
+        <TitleText style={styles.title}>Start a new game!</TitleText>
         <Card style={styles.inputContainer}>
-          <Text>Select a number:</Text>
+          <BodyText>Select a number:</BodyText>
           <Input
             style={styles.input}
             blurOnSubmit // official props which I am forwarding to TextInput component in my own Input.js
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginVertical: 10,
-    fontFamily: 'open-sans-bold',
   },
   inputContainer: {
     width: 300, // give it 300 pixels, but with maxWidth we are sure that on small devices, it will take max 80% of width
