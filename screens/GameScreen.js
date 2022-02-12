@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 
 import NumberContainer from '../components/NumberContainer';
@@ -16,19 +16,30 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const GameScreen = (props) => {
+  const { userChoice, onGameOver } = props; // getting props values, so I dont need to use props.userChoice through document
+
   const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, props.userChoice) // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
+    generateRandomBetween(1, 100, userChoice) // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
   );
+  const [rounds, setRounds] = useState(0); // number of rounds of guesses
 
   // it survives render and keep its value
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
+  // by default it run "after" every render cycle, but in our case it rerun whenever any prop in [] changes
+  useEffect(() => {
+    if (currentGuess === userChoice) {
+      // if computer guesses correct number, run OnGameOver which runs GameOverHandler and it set final guess rounds
+      onGameOver(rounds);
+    }
+  }, [currentGuess, userChoice, onGameOver]);
+
   const nextGuessHandler = (direction) => {
     // validation that I am not giving bad advices lower/greater
     if (
-      (direction === 'lower' && currentGuess < props.userChoice) ||
-      (direction === 'greater' && currentGuess > props.userChoice)
+      (direction === 'lower' && currentGuess < userChoice) ||
+      (direction === 'greater' && currentGuess > userChoice)
     ) {
       // if I gave bad advice, open Alert
       Alert.alert('Do not lie!', 'You know that this is wrong...', [
@@ -47,6 +58,7 @@ const GameScreen = (props) => {
       currentGuess
     ); // guess again with new lows and highs
     setCurrentGuess(nextNumber);
+    setRounds((curRounds) => curRounds + 1); // raise rounds calculation + 1
   };
 
   return (
