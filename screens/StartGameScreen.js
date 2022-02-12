@@ -14,6 +14,7 @@ import NumberContainer from '../components/NumberContainer';
 import colors from '../constants/colors';
 import BodyText from '../components/BodyText';
 import TitleText from '../components/TitleText';
+import MainButton from '../components/MainButton';
 
 const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState(''); // value I am entering, is inside text input
@@ -50,11 +51,11 @@ const StartGameScreen = (props) => {
       <Card style={styles.summaryContainer}>
         <BodyText>Your selected number:</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button
-          title='START GAME'
+        <MainButton
           onPress={() => props.onStartGame(selectedNumber)} // after click save to props OnStartGame selected Number
-          color={colors.primary}
-        />
+        >
+          START GAME
+        </MainButton>
       </Card>
     ); // if number is confirmed, add new element containing NumberContainer and Button Start Game and put it to return() as {confirmedOutput}
   }
