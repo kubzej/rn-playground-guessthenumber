@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
 import MainButton from '../components/MainButton';
+import BodyText from '../components/BodyText';
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -18,13 +19,20 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
+const renderListItem = (value, numOfRound) => (
+  <View key={value} style={styles.listItem}>
+    <BodyText>#{numOfRound}</BodyText>
+    <BodyText>{value}</BodyText>
+  </View>
+);
+
 const GameScreen = (props) => {
   const { userChoice, onGameOver } = props; // getting props values, so I dont need to use props.userChoice through document
 
-  const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, userChoice) // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
-  );
-  const [rounds, setRounds] = useState(0); // number of rounds of guesses
+  const initialGuess = generateRandomBetween(1, 100, userChoice); // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
+
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [pastGuesses, setPastGuesses] = useState([initialGuess]); // historical guesses
 
   // it survives render and keep its value
   const currentLow = useRef(1);
@@ -34,7 +42,7 @@ const GameScreen = (props) => {
   useEffect(() => {
     if (currentGuess === userChoice) {
       // if computer guesses correct number, run OnGameOver which runs GameOverHandler and it set final guess rounds
-      onGameOver(rounds);
+      onGameOver(pastGuesses.length);
     }
   }, [currentGuess, userChoice, onGameOver]);
 
@@ -53,7 +61,7 @@ const GameScreen = (props) => {
     if (direction === 'lower') {
       currentHigh.current = currentGuess; // save new current high = current guess (next number cant be higher than this one)
     } else {
-      currentLow.current = currentGuess; // save new current low = current guess (next number cant be lower than this one)
+      currentLow.current = currentGuess + 1; // save new current low = current guess (next number cant be lower than this one)
     }
     const nextNumber = generateRandomBetween(
       currentLow.current,
@@ -61,7 +69,7 @@ const GameScreen = (props) => {
       currentGuess
     ); // guess again with new lows and highs
     setCurrentGuess(nextNumber);
-    setRounds((curRounds) => curRounds + 1); // raise rounds calculation + 1
+    setPastGuesses((curPastGuesses) => [nextNumber, ...curPastGuesses]); // with new Guess, t this number to list of previous guesses
   };
 
   return (
@@ -76,6 +84,13 @@ const GameScreen = (props) => {
           <Ionicons name='md-add' size={24} color='white' />
         </MainButton>
       </Card>
+      <View style={styles.list}>
+        <ScrollView>
+          {pastGuesses.map((guess, index) =>
+            renderListItem(guess, pastGuesses.length - index)
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -88,10 +103,23 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginTop: 20,
     width: 400,
     maxWidth: '90%',
+  },
+  list: {
+    flex: 1, // important for android so nested ScrollView is really scrollable
+    width: '80%',
+  },
+  listItem: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 15,
+    marginVertical: 10,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 
