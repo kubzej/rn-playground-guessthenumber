@@ -111,9 +111,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   inputContainer: {
-    width: 300, // give it 300 pixels, but with maxWidth we are sure that on small devices, it will take max 80% of width
-    maxWidth: '80%',
+    width: '80%',
+    minWidth: 300, // give it min 300 pixels, but with width we are sure that on small devices, it will take max 80% of width
     alignItems: 'center', // align items to center on x axis
+    maxWidth: '95%', // wee are sure it will never go outside of screen
   },
   buttonContainer: {
     flexDirection: 'row', // so they next to each other on 1 row
