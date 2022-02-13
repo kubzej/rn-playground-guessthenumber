@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -23,6 +23,9 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState(''); // value I am entering, is inside text input
   const [confirmed, setConfirmed] = useState(false); // state to know if the enteredValue is confirmed
   const [selectedNumber, setSelectedNumber] = useState(); // number after confirming enteredNumber, number I really want to work with
+  const [buttonWidth, setButtonWidth] = useState(
+    Dimensions.get('window').width / 4
+  ); // button width to work with orientation
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, '')); // replace non number string with empty string and set it as enteredValue
@@ -32,6 +35,17 @@ const StartGameScreen = (props) => {
     setEnteredValue('');
     setConfirmed(false);
   };
+
+  // to calculate button width anytime I change orientation
+  useEffect(() => {
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get('window').width / 4);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout); // just do cleanup
+    };
+  });
 
   const confirmInputHandler = () => {
     const chosenNumber = parseInt(enteredValue);
@@ -83,14 +97,14 @@ const StartGameScreen = (props) => {
                 value={enteredValue} // set value as enteredValue which is taken from numberInputHandler
               />
               <View style={styles.buttonContainer}>
-                <View style={styles.button}>
+                <View style={{ width: buttonWidth }}>
                   <Button
                     title='RESET'
                     color={colors.accent}
                     onPress={resetInputHandler}
                   />
                 </View>
-                <View style={styles.button}>
+                <View style={{ width: buttonWidth }}>
                   <Button
                     title='CONFIRM'
                     color={colors.primary}
@@ -129,10 +143,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15,
   },
-  button: {
-    // width: '45%',
-    width: Dimensions.get('window').width / 3, // almost same as percentage, window here mean on Android it's without top bar
-  },
+  // button: {
+  //   // width: '45%',
+  //   width: Dimensions.get('window').width / 3, // almost same as percentage, window here mean on Android it's without top bar
+  // },
   input: {
     width: 50,
     textAlign: 'center',
