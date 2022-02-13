@@ -5,25 +5,39 @@ import TitleText from './TitleText';
 
 const Header = (props) => {
   return (
-    <View style={styles.header}>
+    <View
+      // merge base styles with styles specific for each platform
+      style={{
+        ...styles.headerBase,
+        ...Platform.select({
+          ios: styles.headerIOS,
+          android: styles.headerAndroid,
+        }),
+      }}
+    >
       <TitleText style={styles.title}>{props.title}</TitleText>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
+  headerBase: {
     width: '100%', // width is through whole screen, as for main App View element the flex=1
     height: 90,
     paddingTop: 36, // because of status bar
-    backgroundColor: Platform.OS === 'android' ? colors.primary : 'white', // select color based on platform
     justifyContent: 'center', // how the child elements are positioned => Primary axis (flex direction column is default)
     alignItems: 'center', // how the child elements are positioned => Secondary axis
-    borderBottomColor: Platform.OS === 'ios' ? '#ccc' : 'transparent',
-    borderBottomWidth: Platform.OS === 'ios' ? 1 : 0,
+  },
+  headerIOS: {
+    backgroundColor: 'white',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  headerAndroid: {
+    backgroundColor: colors.primary,
   },
   title: {
-    color: Platform.OS === 'ios' ? colors.primary : 'white',
+    color: Platform.OS === 'ios' ? colors.primary : 'white', // select color based on platform
   },
 });
 
