@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
@@ -7,6 +14,7 @@ import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
 import MainButton from '../components/MainButton';
 import BodyText from '../components/BodyText';
+import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -104,13 +112,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: Dimensions.get('window').height > 600 ? 30 : 10, // if height is bigger than 600, use mmargin 30, if not use margin 10
     width: 400,
     maxWidth: '90%',
   },
   listContainer: {
     flex: 1, // important for android so nested ScrollView is really scrollable
-    width: '80%',
+    width: Dimensions.get('window').width > 500 ? '60%' : '80%',
   },
   list: {
     alignItems: 'center', // specifically for scrollView to have each item on center
@@ -125,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '60%',
+    width: '80%',
   },
 });
 

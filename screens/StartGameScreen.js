@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions,
 } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
@@ -123,7 +124,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   button: {
-    width: '45%',
+    // width: '45%',
+    width: Dimensions.get('window').width / 3, // almost same as percentage, window here mean on Android it's without top bar
   },
   input: {
     width: 50,
