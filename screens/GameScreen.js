@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
@@ -34,6 +35,8 @@ const renderListItem = (value, numOfRound) => (
 );
 
 const GameScreen = (props) => {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT); // keep orientation for this sceen on portrait
+
   const { userChoice, onGameOver } = props; // getting props values, so I dont need to use props.userChoice through document
 
   const initialGuess = generateRandomBetween(1, 100, userChoice); // start game with number between 1 and 100 (100 automatically excluded) and exclude users choice
