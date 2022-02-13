@@ -14,7 +14,6 @@ import Card from '../components/Card';
 import DefaultStyles from '../constants/default-styles';
 import MainButton from '../components/MainButton';
 import BodyText from '../components/BodyText';
-import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -41,10 +40,23 @@ const GameScreen = (props) => {
 
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([initialGuess]); // historical guesses
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+    Dimensions.get('window').height
+  );
 
   // it survives render and keep its value
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
 
   // by default it run "after" every render cycle, but in our case it rerun whenever any prop in [] changes
   useEffect(() => {
@@ -80,9 +92,33 @@ const GameScreen = (props) => {
     setPastGuesses((curPastGuesses) => [nextNumber, ...curPastGuesses]); // with new Guess, t this number to list of previous guesses
   };
 
+  if (availableDeviceHeight < 500) {
+    return (
+      <View style={styles.screen}>
+        <Text style={DefaultStyles.titleText}>Opponnet's guess:</Text>
+        <View style={styles.controls}>
+          <MainButton onPress={nextGuessHandler.bind(this, 'lower')}>
+            <Ionicons name='md-remove' size={24} color='white' />
+          </MainButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton onPress={nextGuessHandler.bind(this, 'greater')}>
+            <Ionicons name='md-add' size={24} color='white' />
+          </MainButton>
+        </View>
+        <View style={styles.listContainer}>
+          <ScrollView contentContainerStyle={styles.list}>
+            {pastGuesses.map((guess, index) =>
+              renderListItem(guess, pastGuesses.length - index)
+            )}
+          </ScrollView>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.screen}>
-      <Text style={DefaultStyles.titleText}>Opponnet's guess:</Text>
+      <Text style={DefaultStyles.title}>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <MainButton onPress={nextGuessHandler.bind(this, 'lower')}>
@@ -115,6 +151,12 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height > 600 ? 30 : 10, // if height is bigger than 600, use mmargin 30, if not use margin 10
     width: 400,
     maxWidth: '90%',
+  },
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '80%',
   },
   listContainer: {
     flex: 1, // important for android so nested ScrollView is really scrollable

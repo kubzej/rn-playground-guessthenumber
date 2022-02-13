@@ -24,7 +24,7 @@ const StartGameScreen = (props) => {
   const [confirmed, setConfirmed] = useState(false); // state to know if the enteredValue is confirmed
   const [selectedNumber, setSelectedNumber] = useState(); // number after confirming enteredNumber, number I really want to work with
   const [buttonWidth, setButtonWidth] = useState(
-    Dimensions.get('window').width / 4
+    Dimensions.get('window').width / 3
   ); // button width to work with orientation
 
   const numberInputHandler = (inputText) => {
@@ -39,7 +39,7 @@ const StartGameScreen = (props) => {
   // to calculate button width anytime I change orientation
   useEffect(() => {
     const updateLayout = () => {
-      setButtonWidth(Dimensions.get('window').width / 4);
+      setButtonWidth(Dimensions.get('window').width / 3);
     };
     Dimensions.addEventListener('change', updateLayout);
     return () => {
