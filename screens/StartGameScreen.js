@@ -8,6 +8,8 @@ import {
   Keyboard,
   Alert,
   Dimensions,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Card from '../components/Card';
 import Input from '../components/Input';
@@ -61,43 +63,47 @@ const StartGameScreen = (props) => {
     ); // if number is confirmed, add new element containing NumberContainer and Button Start Game and put it to return() as {confirmedOutput}
   }
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <View style={styles.screen}>
-        <TitleText style={styles.title}>Start a new game!</TitleText>
-        <Card style={styles.inputContainer}>
-          <BodyText>Write a number:</BodyText>
-          <Input
-            style={styles.input}
-            blurOnSubmit // official props which I am forwarding to TextInput component in my own Input.js
-            keyboardType='number-pad'
-            maxLength={2}
-            onChangeText={numberInputHandler} // when changing text run validation
-            value={enteredValue} // set value as enteredValue which is taken from numberInputHandler
-          />
-          <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-              <Button
-                title='RESET'
-                color={colors.accent}
-                onPress={resetInputHandler}
+    <ScrollView>
+      <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}
+        >
+          <View style={styles.screen}>
+            <TitleText style={styles.title}>Start a new game!</TitleText>
+            <Card style={styles.inputContainer}>
+              <BodyText>Write a number:</BodyText>
+              <Input
+                style={styles.input}
+                blurOnSubmit // official props which I am forwarding to TextInput component in my own Input.js
+                keyboardType='number-pad'
+                maxLength={2}
+                onChangeText={numberInputHandler} // when changing text run validation
+                value={enteredValue} // set value as enteredValue which is taken from numberInputHandler
               />
-            </View>
-            <View style={styles.button}>
-              <Button
-                title='CONFIRM'
-                color={colors.primary}
-                onPress={confirmInputHandler}
-              />
-            </View>
+              <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                  <Button
+                    title='RESET'
+                    color={colors.accent}
+                    onPress={resetInputHandler}
+                  />
+                </View>
+                <View style={styles.button}>
+                  <Button
+                    title='CONFIRM'
+                    color={colors.primary}
+                    onPress={confirmInputHandler}
+                  />
+                </View>
+              </View>
+            </Card>
+            {confirmedOutput}
           </View>
-        </Card>
-        {confirmedOutput}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
